@@ -173,5 +173,5 @@ PORT=5000
 
 ## Live Demo
 
-https://finwise.onrender.com
+https://ai-powered-personal-finance-tracker-vu0h.onrender.com
 
