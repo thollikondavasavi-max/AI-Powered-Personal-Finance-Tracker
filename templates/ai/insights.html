@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}AI Insights – FinWise{% endblock %}
+
+{% block body %}
+<div id="mobile-overlay" class="mobile-overlay"></div>
+<div class="app-layout">
+  {% include "partials/sidebar.html" %}
+  <div class="main-content">
+    {% include "partials/topbar.html" %}
+    <div class="page-content">
+      <!-- Header -->
+      <div class="mb-8">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
+            <i class="fa-solid fa-brain text-white"></i>
+          </div>
+          <h1 class="text-3xl font-black text-white">AI Financial Insights</h1>
+          <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs font-bold">BETA</span>
+        </div>
+        <p class="text-slate-400 text-sm">Machine learning models analyze your spending patterns to provide personalized insights and predictions.</p>
+      </div>
+
+      <!-- Smart Insights -->
+      <div class="mb-8">
+        <h2 class="text-xl font-bold mb-4">Smart Insights</h2>
+        <div id="insights-grid" class="space-y-3">
+          <div class="skeleton h-20 rounded-xl"></div>
+          <div class="skeleton h-20 rounded-xl"></div>
+          <div class="skeleton h-20 rounded-xl"></div>
+        </div>
+      </div>
+
+      <!-- Two Column: Expense Prediction + Category Predictor -->
+      <div class="grid lg:grid-cols-2 gap-6 mb-8">
+
+        <!-- Expense Prediction -->
+        <div class="glass-card p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+              <i class="fa-solid fa-chart-line text-blue-400 text-sm"></i>
+            </div>
+            <h2 class="text-lg font-bold">Next Month Prediction</h2>
+          </div>
+          <div id="expense-prediction">
+            <div class="text-center py-6 text-slate-400">
+              <i class="fa-solid fa-spinner fa-spin text-2xl mb-3 block"></i>
+              Running prediction model...
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Predictor -->
+        <div class="glass-card p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+              <i class="fa-solid fa-tags text-purple-400 text-sm"></i>
+            </div>
+            <h2 class="text-lg font-bold">Category Predictor</h2>
+          </div>
+          <p class="text-slate-400 text-sm mb-4">Type a transaction description and our AI will predict its category.</p>
+
+          <div class="flex gap-3 mb-4">
+            <div class="relative flex-1">
+              <input type="text" id="predict-input" class="form-input text-sm" placeholder="e.g. swiggy order, uber cab, amazon purchase" />
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="predictCategory()">
+              <i class="fa-solid fa-brain"></i> Predict
+            </button>
+          </div>
+
+          <div id="prediction-result" class="hidden">
+            <div class="p-4 rounded-xl border border-purple-500/20 bg-purple-500/5">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="text-purple-400 text-sm font-semibold">Predicted Category:</div>
+                <div class="badge badge-purple" id="predicted-cat"></div>
+              </div>
+              <div class="text-xs text-slate-400 mb-2">Confidence: <span id="pred-confidence" class="text-purple-300 font-semibold"></span></div>
+              <div class="text-xs text-slate-500 mb-3">Model: TF-IDF + Logistic Regression</div>
+              <div id="pred-alternatives" class="space-y-1"></div>
+            </div>
+          </div>
+
+          <!-- Example prompts -->
+          <div class="mt-4">
+            <div class="text-xs text-slate-500 mb-2">Try these examples:</div>
+            <div class="flex flex-wrap gap-2">
+              <button class="px-3 py-1 rounded-full border border-slate-700 text-xs text-slate-400 hover:border-indigo-500 hover:text-indigo-400 transition-colors" onclick="predictExample('swiggy food order')">Swiggy order</button>
+              <button class="px-3 py-1 rounded-full border border-slate-700 text-xs text-slate-400 hover:border-indigo-500 hover:text-indigo-400 transition-colors" onclick="predictExample('uber cab ride')">Uber ride</button>
+              <button class="px-3 py-1 rounded-full border border-slate-700 text-xs text-slate-400 hover:border-indigo-500 hover:text-indigo-400 transition-colors" onclick="predictExample('amazon online shopping')">Amazon purchase</button>
+              <button class="px-3 py-1 rounded-full border border-slate-700 text-xs text-slate-400 hover:border-indigo-500 hover:text-indigo-400 transition-colors" onclick="predictExample('electricity bill payment')">Electricity bill</button>
+              <button class="px-3 py-1 rounded-full border border-slate-700 text-xs text-slate-400 hover:border-indigo-500 hover:text-indigo-400 transition-colors" onclick="predictExample('monthly salary credit')">Salary</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Budget Recommendation -->
+      <div class="glass-card p-6">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
+            <i class="fa-solid fa-calculator text-green-400 text-sm"></i>
+          </div>
+          <h2 class="text-lg font-bold">Budget Recommendation (50/30/20 Rule)</h2>
+        </div>
+        <div id="budget-recommendation">
+          <div class="text-center py-8 text-slate-400">
+            <i class="fa-solid fa-spinner fa-spin text-2xl mb-3 block"></i>
+            Analyzing spending patterns...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/ai.js"></script>
+{% endblock %}

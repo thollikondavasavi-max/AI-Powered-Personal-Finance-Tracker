@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block title %}FinWise – AI Powered Smart Finance Tracker{% endblock %}
+
+{% block body %}
+<div class="hero-section">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <!-- Floating decorative elements -->
+  <div class="floating-card" style="top:15%;left:8%;animation-delay:0s">
+    <div class="glass-card p-4 flex items-center gap-3" style="animation:none">
+      <div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+        <i class="fa-solid fa-arrow-trend-up text-green-400"></i>
+      </div>
+      <div>
+        <div class="text-xs text-slate-400">Monthly Income</div>
+        <div class="text-base font-bold text-green-400">₹75,000</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-card" style="top:25%;right:8%;animation-delay:2s">
+    <div class="glass-card p-4 flex items-center gap-3" style="animation:none">
+      <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+        <i class="fa-solid fa-brain text-purple-400"></i>
+      </div>
+      <div>
+        <div class="text-xs text-slate-400">AI Prediction</div>
+        <div class="text-base font-bold text-purple-400">₹42,300</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-card" style="bottom:25%;left:6%;animation-delay:4s">
+    <div class="glass-card p-4 flex items-center gap-3" style="animation:none">
+      <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+        <i class="fa-solid fa-piggy-bank text-blue-400"></i>
+      </div>
+      <div>
+        <div class="text-xs text-slate-400">Savings Rate</div>
+        <div class="text-base font-bold text-blue-400">32.5%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="relative z-10 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
+    <div class="flex items-center gap-3">
+      <div class="logo-icon">
+        <i class="fa-solid fa-wallet text-white text-lg"></i>
+      </div>
+      <span class="text-xl font-bold gradient-text">FinWise</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="/login" class="btn btn-ghost text-sm">Sign In</a>
+      <a href="/signup" class="btn btn-primary text-sm">Get Started Free</a>
+    </div>
+  </nav>
+
+  <!-- Hero Content -->
+  <div class="relative z-10 flex flex-col items-center justify-center text-center px-6 py-20" style="min-height:85vh">
+    <div class="mb-6">
+      <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-sm font-medium">
+        <i class="fa-solid fa-sparkles text-xs"></i>
+        AI-Powered Personal Finance
+      </span>
+    </div>
+
+    <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tight">
+      <span class="text-white">Take Control of</span><br/>
+      <span class="gradient-text">Your Finances</span>
+    </h1>
+
+    <p class="text-slate-400 text-lg md:text-xl max-w-2xl mb-10 leading-relaxed">
+      Track income, expenses, and savings with AI-powered insights. Predict your spending, set budgets, and achieve your financial goals — all in one beautiful dashboard.
+    </p>
+
+    <div class="flex flex-col sm:flex-row items-center gap-4 mb-16">
+      <a href="/signup" class="btn btn-primary btn-lg">
+        <i class="fa-solid fa-rocket"></i> Start for Free
+      </a>
+      <a href="/login" class="btn btn-ghost btn-lg">
+        <i class="fa-solid fa-play-circle"></i> Try Demo
+      </a>
+    </div>
+
+    <!-- Dashboard preview mockup -->
+    <div class="relative w-full max-w-4xl">
+      <div class="glass-card p-6 border border-indigo-500/20" style="background:rgba(15,23,42,0.8)">
+        <!-- Mini dashboard -->
+        <div class="grid grid-cols-4 gap-3 mb-4">
+          <div class="stat-card balance text-center p-3">
+            <div class="text-xs text-slate-400 mb-1">Balance</div>
+            <div class="text-lg font-bold gradient-text">₹1.2L</div>
+          </div>
+          <div class="stat-card income text-center p-3">
+            <div class="text-xs text-slate-400 mb-1">Income</div>
+            <div class="text-lg font-bold text-green-400">₹75K</div>
+          </div>
+          <div class="stat-card expense text-center p-3">
+            <div class="text-xs text-slate-400 mb-1">Expense</div>
+            <div class="text-lg font-bold text-red-400">₹42K</div>
+          </div>
+          <div class="stat-card savings text-center p-3">
+            <div class="text-xs text-slate-400 mb-1">Savings</div>
+            <div class="text-lg font-bold text-blue-400">₹33K</div>
+          </div>
+        </div>
+        <!-- Mini chart placeholder -->
+        <div class="flex items-end gap-2 h-24 px-4">
+          <div class="flex-1 bg-indigo-500/30 rounded-t" style="height:40%"></div>
+          <div class="flex-1 bg-purple-500/30 rounded-t" style="height:70%"></div>
+          <div class="flex-1 bg-indigo-500/30 rounded-t" style="height:55%"></div>
+          <div class="flex-1 bg-purple-500/30 rounded-t" style="height:85%"></div>
+          <div class="flex-1 bg-indigo-500/30 rounded-t" style="height:60%"></div>
+          <div class="flex-1 bg-indigo-500 rounded-t" style="height:90%"></div>
+        </div>
+        <div class="flex justify-between mt-2 text-xs text-slate-500 px-4">
+          <span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span>
+        </div>
+      </div>
+      <!-- Glow effect -->
+      <div class="absolute inset-0 rounded-2xl" style="background:radial-gradient(ellipse at center,rgba(99,102,241,0.15) 0%,transparent 70%);filter:blur(20px);z-index:-1"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Features Section -->
+<section class="relative py-24 px-6" style="background:var(--bg-secondary)">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-black mb-4">Everything you need to <span class="gradient-text">manage money</span></h2>
+      <p class="text-slate-400 text-lg">Powerful features designed for modern financial management</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      {% set features = [
+        ('fa-brain','AI Predictions','Machine learning models predict your next month\'s expenses and recommend optimal budgets based on your spending patterns.','from-purple-500 to-indigo-500'),
+        ('fa-chart-pie','Smart Analytics','Interactive Chart.js visualizations — income vs expense trends, category breakdowns, savings trajectories, and weekly spending.','from-blue-500 to-cyan-500'),
+        ('fa-shield-halved','Bank-Grade Security','JWT authentication, bcrypt password hashing, SQL injection prevention, and XSS protection keep your data safe.','from-green-500 to-emerald-500'),
+        ('fa-tags','Custom Categories','Track spending across 16 default categories or create your own. Each with custom icons and colors.','from-orange-500 to-amber-500'),
+        ('fa-bullseye','Budget Tracking','Set monthly budgets, get real-time alerts when approaching limits, and track progress with visual indicators.','from-pink-500 to-rose-500'),
+        ('fa-file-csv','Export & Reports','Download your complete transaction history as CSV for external analysis or tax filing.','from-teal-500 to-cyan-500'),
+      ] %}
+
+      {% for icon, title, desc, gradient in features %}
+      <div class="glass-card card-glow p-6">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br {{ gradient }} flex items-center justify-center mb-4">
+          <i class="fa-solid {{ icon }} text-white text-xl"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-3">{{ title }}</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">{{ desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-24 px-6 text-center">
+  <div class="max-w-2xl mx-auto">
+    <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 mb-6 animate-float">
+      <i class="fa-solid fa-chart-line text-3xl text-white"></i>
+    </div>
+    <h2 class="text-4xl font-black mb-4">Ready to take control?</h2>
+    <p class="text-slate-400 text-lg mb-8">Join thousands of users who've transformed their financial lives with FinWise.</p>
+    <a href="/signup" class="btn btn-primary btn-lg">
+      <i class="fa-solid fa-rocket"></i> Start Tracking Free
+    </a>
+    <div class="mt-4 text-sm text-slate-500">
+      <i class="fa-solid fa-lock text-xs mr-1"></i> Demo: <strong class="text-slate-300">demo</strong> / <strong class="text-slate-300">demo1234</strong>
+    </div>
+  </div>
+</section>
+{% endblock %}

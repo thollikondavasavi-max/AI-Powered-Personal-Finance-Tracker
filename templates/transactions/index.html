@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% block title %}Transactions – FinWise{% endblock %}
+
+{% block body %}
+<div id="mobile-overlay" class="mobile-overlay"></div>
+<div class="app-layout">
+  {% include "partials/sidebar.html" %}
+
+  <div class="main-content">
+    {% include "partials/topbar.html" %}
+
+    <div class="page-content">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h1 class="text-3xl font-black text-white mb-1">Transactions</h1>
+          <p class="text-slate-400 text-sm">Manage all your income and expenses</p>
+        </div>
+        <div class="flex gap-3">
+          <button class="btn btn-ghost btn-sm" id="export-btn">
+            <i class="fa-solid fa-file-csv"></i> Export CSV
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="openTransactionModal()">
+            <i class="fa-solid fa-plus"></i> Add Transaction
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="glass-card p-4 mb-6 flex flex-wrap gap-3">
+        <div class="relative flex-1 min-w-48">
+          <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm"></i>
+          <input type="text" id="search-input" class="form-input pl-9 text-sm" placeholder="Search transactions..." />
+        </div>
+        <select id="filter-type" class="form-input form-select text-sm" style="width:140px">
+          <option value="">All Types</option>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
+        </select>
+        <select id="filter-category" class="form-input form-select text-sm" style="width:160px">
+          <option value="">All Categories</option>
+        </select>
+        <select id="filter-month" class="form-input form-select text-sm" style="width:130px">
+          <option value="">All Months</option>
+          <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+          <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+          <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+          <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+        </select>
+        <select id="sort-by" class="form-input form-select text-sm" style="width:150px">
+          <option value="date_desc">Date (Newest)</option>
+          <option value="date_asc">Date (Oldest)</option>
+          <option value="amount_desc">Amount (High)</option>
+          <option value="amount_asc">Amount (Low)</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="resetFilters()">
+          <i class="fa-solid fa-rotate"></i> Reset
+        </button>
+      </div>
+
+      <!-- Stats Strip -->
+      <div class="grid grid-cols-3 gap-4 mb-6">
+        <div class="glass-card p-4 text-center">
+          <div class="text-xs text-slate-400 mb-1">Total Income</div>
+          <div class="text-xl font-bold text-green-400" id="strip-income">₹0</div>
+        </div>
+        <div class="glass-card p-4 text-center">
+          <div class="text-xs text-slate-400 mb-1">Total Expenses</div>
+          <div class="text-xl font-bold text-red-400" id="strip-expense">₹0</div>
+        </div>
+        <div class="glass-card p-4 text-center">
+          <div class="text-xs text-slate-400 mb-1">Net Balance</div>
+          <div class="text-xl font-bold gradient-text" id="strip-net">₹0</div>
+        </div>
+      </div>
+
+      <!-- Transactions Table -->
+      <div class="glass-card overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Type</th>
+                <th class="text-right">Amount</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-body">
+              <tr><td colspan="6" class="text-center py-12 text-slate-500">
+                <i class="fa-solid fa-spinner fa-spin text-2xl mb-3 block"></i>
+                Loading transactions...
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between px-4 py-3 border-t border-indigo-500/10">
+          <div class="text-sm text-slate-400" id="pagination-info">Showing 0 of 0</div>
+          <div class="flex items-center gap-2" id="pagination-controls"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Transaction Modal -->
+<div class="modal-overlay" id="transaction-modal">
+  <div class="modal">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-xl font-bold" id="modal-title">Add Transaction</h2>
+      <button onclick="closeTransactionModal()" class="btn btn-ghost btn-icon">
+        <i class="fa-solid fa-times"></i>
+      </button>
+    </div>
+
+    <form id="transaction-form" novalidate>
+      <input type="hidden" id="edit-id" value="" />
+
+      <!-- Type Selector -->
+      <div class="form-group">
+        <label class="form-label">Transaction Type</label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="cursor-pointer">
+            <input type="radio" name="type" value="expense" class="sr-only" id="type-expense" checked />
+            <div class="type-btn p-3 rounded-xl border border-red-500/30 bg-red-500/5 text-center hover:bg-red-500/10 transition-colors" id="type-expense-btn">
+              <i class="fa-solid fa-arrow-down text-red-400 text-lg block mb-1"></i>
+              <span class="text-sm font-semibold text-red-400">Expense</span>
+            </div>
+          </label>
+          <label class="cursor-pointer">
+            <input type="radio" name="type" value="income" class="sr-only" id="type-income" />
+            <div class="type-btn p-3 rounded-xl border border-slate-700 text-center hover:bg-green-500/10 transition-colors" id="type-income-btn">
+              <i class="fa-solid fa-arrow-up text-slate-400 text-lg block mb-1 income-icon"></i>
+              <span class="text-sm font-semibold text-slate-400 income-label">Income</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Amount -->
+      <div class="form-group">
+        <label class="form-label" for="amount">Amount (₹)</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">₹</span>
+          <input type="number" id="amount" class="form-input pl-8" placeholder="0.00" step="0.01" min="0.01" required />
+        </div>
+      </div>
+
+      <!-- Description + AI Predict -->
+      <div class="form-group">
+        <label class="form-label" for="description">
+          Description
+          <button type="button" id="ai-predict-btn" class="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 transition-colors">
+            <i class="fa-solid fa-brain mr-1"></i>AI Predict Category
+          </button>
+        </label>
+        <input type="text" id="description" class="form-input" placeholder="e.g. Swiggy food order" required />
+        <div id="ai-prediction-result" class="hidden mt-2 p-2 rounded-lg bg-purple-500/10 border border-purple-500/20 text-xs text-purple-300"></div>
+      </div>
+
+      <!-- Category -->
+      <div class="form-group">
+        <label class="form-label" for="category-select">Category</label>
+        <select id="category-select" class="form-input form-select"></select>
+      </div>
+
+      <!-- Date -->
+      <div class="form-group">
+        <label class="form-label" for="date">Date</label>
+        <input type="date" id="date" class="form-input" required />
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group">
+        <label class="form-label" for="notes">Notes (optional)</label>
+        <textarea id="notes" class="form-input" rows="2" placeholder="Additional details..."></textarea>
+      </div>
+
+      <div class="flex gap-3 mt-6">
+        <button type="submit" class="btn btn-primary flex-1" id="save-btn">
+          <i class="fa-solid fa-check"></i> Save Transaction
+        </button>
+        <button type="button" onclick="closeTransactionModal()" class="btn btn-ghost">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/transactions.js"></script>
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}Dashboard – FinWise{% endblock %}
+
+{% block body %}
+<div id="mobile-overlay" class="mobile-overlay"></div>
+
+<div class="app-layout">
+  <!-- Sidebar -->
+  {% include "partials/sidebar.html" %}
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Topbar -->
+    {% include "partials/topbar.html" %}
+
+    <!-- Page Content -->
+    <div class="page-content">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h1 class="text-3xl font-black text-white mb-1">Dashboard</h1>
+          <p class="text-slate-400 text-sm" id="greeting-text">Good morning! Here's your financial overview.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <select id="month-selector" class="form-input form-select text-sm" style="width:auto">
+            <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+            <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+            <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+            <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+          </select>
+          <button class="btn btn-primary btn-sm" onclick="window.location='/transactions'">
+            <i class="fa-solid fa-plus"></i> Add Transaction
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <!-- Balance -->
+        <div class="stat-card balance card-glow">
+          <div class="stat-icon" style="background:rgba(99,102,241,0.15)">
+            <i class="fa-solid fa-wallet text-indigo-400"></i>
+          </div>
+          <div class="stat-value gradient-text" id="stat-balance">₹0</div>
+          <div class="stat-label">Current Balance</div>
+          <div class="stat-change up" id="stat-balance-change"><i class="fa-solid fa-arrow-up text-xs"></i> <span>—</span></div>
+        </div>
+
+        <!-- Income -->
+        <div class="stat-card income card-glow">
+          <div class="stat-icon" style="background:rgba(34,197,94,0.15)">
+            <i class="fa-solid fa-arrow-trend-up text-green-400"></i>
+          </div>
+          <div class="stat-value text-green-400" id="stat-income">₹0</div>
+          <div class="stat-label">Monthly Income</div>
+          <div class="stat-change up" id="stat-income-change"><i class="fa-solid fa-calendar text-xs"></i> <span>This month</span></div>
+        </div>
+
+        <!-- Expense -->
+        <div class="stat-card expense card-glow">
+          <div class="stat-icon" style="background:rgba(239,68,68,0.15)">
+            <i class="fa-solid fa-arrow-trend-down text-red-400"></i>
+          </div>
+          <div class="stat-value text-red-400" id="stat-expense">₹0</div>
+          <div class="stat-label">Monthly Expenses</div>
+          <div class="stat-change down" id="stat-expense-change"><i class="fa-solid fa-calendar text-xs"></i> <span>This month</span></div>
+        </div>
+
+        <!-- Savings -->
+        <div class="stat-card savings card-glow">
+          <div class="stat-icon" style="background:rgba(6,182,212,0.15)">
+            <i class="fa-solid fa-piggy-bank text-cyan-400"></i>
+          </div>
+          <div class="stat-value text-cyan-400" id="stat-savings">₹0</div>
+          <div class="stat-label">Monthly Savings</div>
+          <div class="stat-change up" id="stat-savings-change"><i class="fa-solid fa-percentage text-xs"></i> <span>Savings rate</span></div>
+        </div>
+      </div>
+
+      <!-- Budget Alert Banner -->
+      <div id="budget-alert" class="hidden mb-6 p-4 rounded-xl border border-orange-500/30 bg-orange-500/10 flex items-center gap-3">
+        <i class="fa-solid fa-triangle-exclamation text-orange-400 text-lg"></i>
+        <div>
+          <div class="font-semibold text-orange-300">Budget Alert</div>
+          <div class="text-sm text-orange-400" id="budget-alert-text">You've used a significant portion of your monthly budget.</div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="grid lg:grid-cols-3 gap-6 mb-8">
+        <!-- Income vs Expense Chart -->
+        <div class="lg:col-span-2 glass-card p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold">Income vs Expenses</h2>
+            <div class="flex items-center gap-3 text-xs text-slate-400">
+              <span class="flex items-center gap-1"><span class="inline-block w-3 h-3 rounded-full bg-indigo-500"></span> Income</span>
+              <span class="flex items-center gap-1"><span class="inline-block w-3 h-3 rounded-full bg-red-400"></span> Expenses</span>
+            </div>
+          </div>
+          <div class="chart-container" style="height:220px">
+            <canvas id="income-expense-chart"></canvas>
+          </div>
+        </div>
+
+        <!-- Category Pie -->
+        <div class="glass-card p-6">
+          <h2 class="text-lg font-bold mb-4">Spending by Category</h2>
+          <div class="chart-container" style="height:180px">
+            <canvas id="category-chart"></canvas>
+          </div>
+          <div id="category-legend" class="mt-3 space-y-1"></div>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Recent Transactions + Budget + Weekly -->
+      <div class="grid lg:grid-cols-3 gap-6">
+        <!-- Recent Transactions -->
+        <div class="lg:col-span-2 glass-card p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold">Recent Transactions</h2>
+            <a href="/transactions" class="btn btn-ghost btn-sm">View All <i class="fa-solid fa-arrow-right text-xs"></i></a>
+          </div>
+          <div id="recent-transactions">
+            <!-- Skeleton loaders -->
+            <div class="space-y-3">
+              <div class="skeleton h-14 rounded-xl"></div>
+              <div class="skeleton h-14 rounded-xl"></div>
+              <div class="skeleton h-14 rounded-xl"></div>
+              <div class="skeleton h-14 rounded-xl"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Budget + Weekly Spending -->
+        <div class="flex flex-col gap-6">
+          <!-- Budget Progress -->
+          <div class="glass-card p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-base font-bold">Budget Progress</h2>
+              <a href="/budget" class="text-xs text-indigo-400 hover:text-indigo-300">Edit</a>
+            </div>
+            <div id="budget-section">
+              <div class="text-center py-4 text-slate-400 text-sm">
+                <i class="fa-solid fa-spinner fa-spin mr-2"></i> Loading...
+              </div>
+            </div>
+          </div>
+
+          <!-- Weekly Spending -->
+          <div class="glass-card p-6">
+            <h2 class="text-base font-bold mb-4">This Week</h2>
+            <div class="chart-container" style="height:120px">
+              <canvas id="weekly-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/dashboard.js"></script>
+{% endblock %}

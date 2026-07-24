@@ -1,0 +1,49 @@
+<header class="topbar">
+  <!-- Mobile menu button -->
+  <button id="mobile-menu-btn" class="btn btn-ghost btn-icon lg:hidden mr-2">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- Page title (updated per page via JS) -->
+  <div class="flex items-center gap-3">
+    <div class="hidden lg:block text-sm text-slate-400">
+      <i class="fa-solid fa-calendar-days mr-1"></i>
+      <span id="topbar-date"></span>
+    </div>
+  </div>
+
+  <!-- Right side actions -->
+  <div class="flex items-center gap-3 ml-auto">
+    <!-- Theme toggle -->
+    <button id="theme-toggle" onclick="toggleTheme()" class="btn btn-ghost btn-icon" title="Toggle dark/light mode">
+      <i class="fa-solid fa-sun"></i>
+    </button>
+
+    <!-- Quick Add Transaction -->
+    <button onclick="openQuickAdd()" class="btn btn-primary btn-sm hidden sm:flex">
+      <i class="fa-solid fa-plus"></i> Add Transaction
+    </button>
+
+    <!-- User avatar -->
+    <a href="/profile" class="flex items-center gap-2 cursor-pointer">
+      <div class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white" id="topbar-avatar">A</div>
+    </a>
+  </div>
+</header>
+
+<script>
+  // Set today's date in topbar
+  document.getElementById('topbar-date').textContent = new Date().toLocaleDateString('en-IN', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+  });
+
+  // Set topbar avatar — read localStorage directly so this works before main.js loads
+  try {
+    const raw = localStorage.getItem('fw_user');
+    const user = raw ? JSON.parse(raw) : null;
+    if (user) {
+      const el = document.getElementById('topbar-avatar');
+      if (el) el.textContent = (user.full_name || user.username || 'U').charAt(0).toUpperCase();
+    }
+  } catch (e) {}
+</script>

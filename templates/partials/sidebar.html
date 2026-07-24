@@ -1,0 +1,68 @@
+<aside class="sidebar" id="sidebar">
+  <!-- Logo -->
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <i class="fa-solid fa-wallet text-white"></i>
+    </div>
+    <div>
+      <div class="text-base font-bold gradient-text">FinWise</div>
+      <div class="text-xs text-slate-500">Smart Finance</div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">Main</div>
+
+    <a href="/dashboard" class="nav-item">
+      <div class="nav-icon"><i class="fa-solid fa-house"></i></div>
+      <span>Dashboard</span>
+    </a>
+
+    <a href="/transactions" class="nav-item">
+      <div class="nav-icon"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+      <span>Transactions</span>
+    </a>
+
+    <a href="/budget" class="nav-item">
+      <div class="nav-icon"><i class="fa-solid fa-bullseye"></i></div>
+      <span>Budget & Goals</span>
+    </a>
+
+    <a href="/charts" class="nav-item">
+      <div class="nav-icon"><i class="fa-solid fa-chart-bar"></i></div>
+      <span>Analytics</span>
+    </a>
+
+    <div class="nav-section-title mt-4">AI Features</div>
+
+    <a href="/insights" class="nav-item">
+      <div class="nav-icon"><i class="fa-solid fa-brain"></i></div>
+      <span>AI Insights</span>
+      <span class="ml-auto text-xs font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400">AI</span>
+    </a>
+
+    <div class="nav-section-title mt-4">Account</div>
+
+    <a href="/profile" class="nav-item">
+      <div class="nav-icon"><i class="fa-solid fa-user"></i></div>
+      <span>Profile</span>
+    </a>
+
+    <button onclick="logout()" class="nav-item w-full border-none bg-transparent text-left cursor-pointer">
+      <div class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
+      <span>Logout</span>
+    </button>
+  </nav>
+
+  <!-- User info at bottom -->
+  <div class="border-t border-indigo-500/10 p-4">
+    <div class="flex items-center gap-3">
+      <div id="sidebar-avatar" class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white flex-shrink-0"></div>
+      <div class="min-w-0">
+        <div id="sidebar-username" class="text-sm font-semibold text-white truncate">Loading...</div>
+        <div id="sidebar-email" class="text-xs text-slate-500 truncate"></div>
+      </div>
+    </div>
+  </div>
+</aside>

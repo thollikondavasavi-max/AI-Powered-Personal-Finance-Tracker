@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block title %}Budget & Goals – FinWise{% endblock %}
+
+{% block body %}
+<div id="mobile-overlay" class="mobile-overlay"></div>
+<div class="app-layout">
+  {% include "partials/sidebar.html" %}
+  <div class="main-content">
+    {% include "partials/topbar.html" %}
+    <div class="page-content">
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h1 class="text-3xl font-black text-white mb-1">Budget & Goals</h1>
+          <p class="text-slate-400 text-sm">Set budgets, track spending, and achieve your savings goals</p>
+        </div>
+        <div class="flex gap-3">
+          <button class="btn btn-primary btn-sm" onclick="openBudgetModal()">
+            <i class="fa-solid fa-sliders"></i> Set Budget
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="openGoalModal()">
+            <i class="fa-solid fa-plus"></i> Add Goal
+          </button>
+        </div>
+      </div>
+
+      <!-- Budget Overview -->
+      <div class="grid lg:grid-cols-3 gap-6 mb-8">
+        <!-- Budget Progress Card -->
+        <div class="lg:col-span-2 glass-card p-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-lg font-bold">Monthly Budget</h2>
+            <div class="flex items-center gap-3">
+              <select id="budget-month" class="form-input form-select text-sm" style="width:130px">
+                <option value="1">January</option><option value="2">February</option><option value="3">March</option>
+                <option value="4">April</option><option value="5">May</option><option value="6">June</option>
+                <option value="7">July</option><option value="8">August</option><option value="9">September</option>
+                <option value="10">October</option><option value="11">November</option><option value="12">December</option>
+              </select>
+            </div>
+          </div>
+          <div id="budget-overview">
+            <div class="text-center py-8 text-slate-400">
+              <i class="fa-solid fa-spinner fa-spin text-2xl mb-3 block"></i>
+              Loading budget...
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Budget Recommendation -->
+        <div class="glass-card p-6">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
+              <i class="fa-solid fa-brain text-purple-400 text-sm"></i>
+            </div>
+            <h2 class="text-base font-bold">AI Recommendation</h2>
+          </div>
+          <div id="ai-budget-rec">
+            <div class="text-center py-4 text-slate-400 text-sm">
+              <i class="fa-solid fa-spinner fa-spin mb-2 block"></i>
+              Analyzing patterns...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Savings Goals -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold">Savings Goals</h2>
+          <button class="btn btn-ghost btn-sm" onclick="openGoalModal()">
+            <i class="fa-solid fa-plus"></i> New Goal
+          </button>
+        </div>
+        <div id="goals-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="text-center py-8 text-slate-400 col-span-full">
+            <i class="fa-solid fa-spinner fa-spin text-2xl mb-3 block"></i>
+            Loading goals...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Budget Modal -->
+<div class="modal-overlay" id="budget-modal">
+  <div class="modal">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-xl font-bold">Set Monthly Budget</h2>
+      <button onclick="closeBudgetModal()" class="btn btn-ghost btn-icon"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <form id="budget-form">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label class="form-label">Month</label>
+          <select id="modal-month" class="form-input form-select"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Year</label>
+          <input type="number" id="modal-year" class="form-input" value="2026" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Total Monthly Budget (₹)</label>
+        <div class="relative">
+          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">₹</span>
+          <input type="number" id="modal-budget" class="form-input pl-8" placeholder="50000" min="1" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Alert Threshold (%)</label>
+        <input type="range" id="alert-threshold" min="50" max="100" value="80" class="w-full accent-indigo-500" />
+        <div class="flex justify-between text-xs text-slate-400 mt-1">
+          <span>50%</span>
+          <span id="threshold-label" class="text-indigo-400 font-semibold">80% — Alert when 80% is spent</span>
+          <span>100%</span>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary w-full mt-2">
+        <i class="fa-solid fa-check"></i> Save Budget
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Goal Modal -->
+<div class="modal-overlay" id="goal-modal">
+  <div class="modal">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-xl font-bold" id="goal-modal-title">Add Savings Goal</h2>
+      <button onclick="closeGoalModal()" class="btn btn-ghost btn-icon"><i class="fa-solid fa-times"></i></button>
+    </div>
+    <form id="goal-form">
+      <input type="hidden" id="goal-edit-id" />
+      <div class="form-group">
+        <label class="form-label">Goal Name</label>
+        <input type="text" id="goal-name" class="form-input" placeholder="e.g. New Laptop, Emergency Fund" required />
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label class="form-label">Target Amount (₹)</label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">₹</span>
+            <input type="number" id="goal-target" class="form-input pl-8" placeholder="100000" min="1" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Current Savings (₹)</label>
+          <div class="relative">
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">₹</span>
+            <input type="number" id="goal-current" class="form-input pl-8" placeholder="0" min="0" />
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Target Deadline</label>
+        <input type="date" id="goal-deadline" class="form-input" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Icon & Color</label>
+        <div class="flex gap-3">
+          <select id="goal-icon" class="form-input form-select flex-1">
+            <option value="fa-bullseye">🎯 Target</option>
+            <option value="fa-laptop">💻 Laptop</option>
+            <option value="fa-car">🚗 Car</option>
+            <option value="fa-house">🏠 House</option>
+            <option value="fa-plane">✈️ Travel</option>
+            <option value="fa-piggy-bank">🐷 Emergency</option>
+            <option value="fa-graduation-cap">🎓 Education</option>
+            <option value="fa-ring">💍 Wedding</option>
+          </select>
+          <input type="color" id="goal-color" class="form-input" style="width:56px;padding:4px" value="#6366f1" />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary w-full mt-2">
+        <i class="fa-solid fa-check"></i> Save Goal
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/budget.js"></script>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Profile – FinWise{% endblock %}
+
+{% block body %}
+<div id="mobile-overlay" class="mobile-overlay"></div>
+<div class="app-layout">
+  {% include "partials/sidebar.html" %}
+  <div class="main-content">
+    {% include "partials/topbar.html" %}
+    <div class="page-content">
+      <div class="mb-8">
+        <h1 class="text-3xl font-black text-white mb-1">Profile Settings</h1>
+        <p class="text-slate-400 text-sm">Manage your account and preferences</p>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-6">
+        <!-- Profile Card -->
+        <div class="glass-card p-6 text-center">
+          <!-- Avatar -->
+          <div class="relative inline-block mb-4">
+            <div id="profile-avatar-display" class="w-24 h-24 rounded-full mx-auto bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-3xl font-bold text-white overflow-hidden"></div>
+            <label for="avatar-upload" class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center cursor-pointer hover:bg-indigo-400 transition-colors border-2 border-slate-900">
+              <i class="fa-solid fa-camera text-white text-xs"></i>
+            </label>
+            <input type="file" id="avatar-upload" class="hidden" accept="image/*" onchange="uploadAvatar(this)" />
+          </div>
+
+          <h2 class="text-xl font-bold text-white mb-1" id="profile-name">Loading...</h2>
+          <p class="text-slate-400 text-sm mb-1" id="profile-email"></p>
+          <p class="text-slate-500 text-xs" id="profile-joined"></p>
+
+          <!-- Quick Stats -->
+          <div class="mt-6 grid grid-cols-2 gap-3 text-center">
+            <div class="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+              <div class="text-lg font-bold text-indigo-400" id="stat-total-txns">0</div>
+              <div class="text-xs text-slate-400">Transactions</div>
+            </div>
+            <div class="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
+              <div class="text-lg font-bold text-purple-400" id="stat-total-saved">₹0</div>
+              <div class="text-xs text-slate-400">Total Saved</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Profile -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Personal Info -->
+          <div class="glass-card p-6">
+            <h3 class="text-lg font-bold mb-4">Personal Information</h3>
+            <form id="profile-form">
+              <div class="grid grid-cols-2 gap-4">
+                <div class="form-group">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" id="pf-fullname" class="form-input" placeholder="Your full name" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Username</label>
+                  <input type="text" id="pf-username" class="form-input" disabled />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email</label>
+                  <input type="email" id="pf-email" class="form-input" disabled />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Phone</label>
+                  <input type="tel" id="pf-phone" class="form-input" placeholder="+91 98765 43210" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Default Currency</label>
+                <select id="pf-currency" class="form-input form-select" style="width:200px">
+                  <option value="INR">₹ INR – Indian Rupee</option>
+                  <option value="USD">$ USD – US Dollar</option>
+                  <option value="EUR">€ EUR – Euro</option>
+                  <option value="GBP">£ GBP – British Pound</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-save"></i> Save Changes
+              </button>
+            </form>
+          </div>
+
+          <!-- Change Password -->
+          <div class="glass-card p-6">
+            <h3 class="text-lg font-bold mb-4">Change Password</h3>
+            <form id="password-form">
+              <div class="form-group">
+                <label class="form-label">Current Password</label>
+                <input type="password" id="current-password" class="form-input" placeholder="Enter current password" />
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="form-group">
+                  <label class="form-label">New Password</label>
+                  <input type="password" id="new-password" class="form-input" placeholder="Min 8 characters" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Confirm New Password</label>
+                  <input type="password" id="confirm-new-password" class="form-input" placeholder="Re-enter password" />
+                </div>
+              </div>
+              <button type="submit" class="btn btn-danger">
+                <i class="fa-solid fa-lock"></i> Update Password
+              </button>
+            </form>
+          </div>
+
+          <!-- Danger Zone -->
+          <div class="glass-card p-6 border border-red-500/20">
+            <h3 class="text-lg font-bold text-red-400 mb-2">Danger Zone</h3>
+            <p class="text-slate-400 text-sm mb-4">Once you delete your account, there is no going back. Please be certain.</p>
+            <button class="btn btn-danger btn-sm" onclick="if(confirm('Are you sure? This cannot be undone.')) showToast('Account deletion is disabled in demo mode.', 'warning')">
+              <i class="fa-solid fa-trash"></i> Delete Account
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/profile.js"></script>
+{% endblock %}

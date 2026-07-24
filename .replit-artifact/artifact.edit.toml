@@ -1,0 +1,14 @@
+kind = "web"
+    previewPath = "/"
+    title = "FinWise"
+    version = "1.0.0"
+    id = "finwise-app-001"
+
+    [[services]]
+    localPort = 5000
+    name = "web"
+    paths = ["/"]
+
+    [services.development]
+    run = "cd artifacts/finwise && python app.py"
+    
